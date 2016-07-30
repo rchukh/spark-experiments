@@ -13,9 +13,11 @@ import org.apache.spark.sql.types.StructField;
 
 
 public class DenseVectorValuesElementsAverageAggregator extends Aggregator<Row, DoubleArrayAVGHolder, Row> {
+    private final String vectorColumnName;
     private final int vectorSize;
 
-    public DenseVectorValuesElementsAverageAggregator(int vectorSize) {
+    public DenseVectorValuesElementsAverageAggregator(String vectorColumnName, int vectorSize) {
+        this.vectorColumnName = vectorColumnName;
         this.vectorSize = vectorSize;
     }
 
@@ -33,7 +35,7 @@ public class DenseVectorValuesElementsAverageAggregator extends Aggregator<Row, 
             double[] sums = buffer.getSums();
             int[] counts = buffer.getCounts();
 
-            DenseVector vector = (DenseVector) input.get(1);
+            DenseVector vector = input.getAs(vectorColumnName);
             double[] vectorValues = vector.values();
             for (int i = 0, valuesLength = vectorValues.length; i < valuesLength; i++) {
                 sums[i] = sums[i] + vectorValues[i];

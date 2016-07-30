@@ -48,7 +48,7 @@ public class AggregatorAPITest extends SparkBaseTest {
         //+---+--------------+
 
         // Initialize custom aggregator
-        Aggregator<Row, DoubleArrayAVGHolder, Row> aggregator = new DenseVectorValuesElementsAverageAggregator(3);
+        Aggregator<Row, DoubleArrayAVGHolder, Row> aggregator = new DenseVectorValuesElementsAverageAggregator("vector", 3);
         Dataset<Row> test = dataFrame.groupBy("id").agg(aggregator.toColumn().as("vectorAvg"));
 
         // Print schema (mostly to show the issues with inner structure)
